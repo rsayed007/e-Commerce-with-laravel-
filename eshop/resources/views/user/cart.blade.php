@@ -6,6 +6,7 @@
 	<!-- Page Info -->
 	<div class="page-info-section page-info">
             <div class="container">
+                
                 <div class="site-breadcrumb">
                     <a href="">Home</a> / 
                     <a href="">Sales</a> / 
@@ -21,6 +22,11 @@
         <!-- Page -->
         <div class="page-area cart-page spad">
             <div class="container">
+                    @if ($errors->all())
+                        <div class="alert alert-danger text-center">
+                            <p>{{$errors}}</p>
+                        </div>
+                    @endif
                 <div class="cart-table">
                     <table>
                         <thead>
@@ -29,9 +35,13 @@
                                 <th>Price</th>
                                 <th>Quantity</th>
                                 <th class="total-th">Total</th>
+                                <th >Action</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @php
+                                $subTotal = 0
+                            @endphp
                             @foreach ($cart_items as $cart_item)
                                 <tr>
                                 <td class="product-col">
@@ -54,7 +64,11 @@
                                     </div>
                                 </td>
                                 <td class="total-col">${{ $cart_item->RelationWithProductTable->product_price * $cart_item->product_quentity}} </td>
+                                <td class="total-col"> <a href="{{url('/cart/view/delete')}}/{{$cart_item->id}}" class="btn btn-danger">Delete</a> </td>
                             </tr>
+                            @php
+                                $subTotal +=  $cart_item->RelationWithProductTable->product_price * $cart_item->product_quentity;
+                            @endphp
                             @endforeach
                             
                         </tbody>
@@ -80,23 +94,25 @@
                                 <div class="shipping-chooes">
                                     <div class="sc-item">
                                         <input type="radio" name="sc" id="one">
-                                        <label for="one">Next day delivery<span>$4.99</span></label>
+                                        <label for="one">Next day delivery<span id="one_value">4.99</span> <span>$</span> </label>
                                     </div>
                                     <div class="sc-item">
                                         <input type="radio" name="sc" id="two">
-                                        <label for="two">Standard delivery<span>$1.99</span></label>
+                                        <label for="two">Standard delivery<span id="two_value">1.99</span><span>$</span></label>
                                     </div>
                                     <div class="sc-item">
                                         <input type="radio" name="sc" id="three">
-                                        <label for="three">Personal Pickup<span>Free</span></label>
+                                        <label for="three" checked>Personal Pickup<span id="three_value">Free</span></label>
                                     </div>
                                 </div>
                                 <h4>Cupon code</h4>
                                 <p>Enter your cupone code</p>
-                                <div class="cupon-input">
-                                    <input type="text">
-                                    <button class="site-btn">Apply</button>
-                                </div>
+
+                                    <div class="cupon-input">
+                                        <input type="text" id="coupon_field" value="">
+                                        <button class="site-btn" id="coupon_btn">Apply</button>
+                                    </div>
+
                             </div>
                         </div>
                         <div class="offset-lg-2 col-lg-6">
@@ -104,9 +120,11 @@
                                 <h4>Cart total</h4>
                                 <p>Final Info</p>
                                 <ul class="cart-total-card">
-                                    <li>Subtotal<span>$59.90</span></li>
-                                    <li>Shipping<span>Free</span></li>
-                                    <li class="total">Total<span>$59.90</span></li>
+                                    <li>Subtotal<span>$ {{$subTotal }}</span></li>
+                                    <li>Discount (%)<span>{{ $coupon_amount }}</span></li>
+                                    <li>Shipping<span id="shipping_cost">Free</span></li>
+                                    <li class="d-none" >Total<span id="total_amount_dami">{{ ($subTotal-($subTotal*$coupon_amount)/100) }}</span><span>$</span></li>
+                                    <li class="total">Total<span id="total_amount">{{ ($subTotal-($subTotal*$coupon_amount)/100) }}</span><span>$</span></li>
                                 </ul>
                                 <a class="site-btn btn-full" href="checkout.html">Proceed to checkout</a>
                             </div>
@@ -118,4 +136,40 @@
         <!-- Page end -->
     
 	
+@endsection
+
+@section('footerSection')
+    <script>
+        $(document).ready(function(){
+            $('#coupon_btn').click(function(){
+                // alert($('#coupon_field').val());
+                 var coupon_name = $('#coupon_field').val();
+                window.location.href = coupon_name;
+            });
+            $('#one').click(function(){
+                $('#shipping_cost').html($('#one_value').html())
+                var total_amount    = parseFloat($('#total_amount_dami').html())
+                var one_value       = parseFloat($('#one_value').html())
+                var new_total       = total_amount + one_value;
+                $('#total_amount').html(new_total)
+                
+            });
+            $('#two').click(function(){
+                $('#shipping_cost').html($('#two_value').html())
+                var total_amount    = parseFloat($('#total_amount_dami').html())
+                var two_value       = parseFloat($('#two_value').html())
+                var new_total       = total_amount + two_value;
+                $('#total_amount').html(new_total)
+                
+            });
+            $('#three').click(function(){
+                $('#shipping_cost').html(0)
+                var total_amount    = parseFloat($('#total_amount').html())
+                var new_total       = total_amount + 0;
+                $('#total_amount').html(new_total)
+                
+            });
+        });
+    
+    </script>
 @endsection

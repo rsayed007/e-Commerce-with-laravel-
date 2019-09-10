@@ -55,6 +55,9 @@
           </ul>
         </li>
         <li class=" active ">
+            <li><a href="{{ url('/coupon') }}"><i class="fa fa-ticket"></i>Add Coupon </a></li>
+        </li>
+        <li class=" active ">
             <li><a href=""><i class="fa fa-files-o"></i> Users </a></li>
         </li>
       </ul>

@@ -54,6 +54,12 @@ Route::post('admin/size/insert', 'admin\SizeController@insertSize');
 Route::get('admin/delete/size/{size_id}', 'admin\SizeController@deleteSize');
 Route::get('admin/restore/size/{size_id}', 'admin\SizeController@restoreSize');
 
+// -------------  Coupon controller
+Route::get('/coupon', 'admin\CuponController@addCoupon');
+Route::post('/coupon/create', 'admin\CuponController@createCoupon');
+
+
+// ----- Admin controller route end
 
 
 
@@ -66,11 +72,13 @@ Route::post('/add/to/cart', 'user\FrontendController@addToCart');
 
 // -------------  cart controller
 Route::get('/cart/view', 'user\CartController@viewCart')->name('cart');
+Route::get('/cart/view/delete/{cart_id}', 'user\CartController@deleteCart');
+Route::get('/cart/view/{coupon_name}', 'user\CartController@viewCart');
 
 
 
 
-// ----- Admin controller route end
+
 
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');

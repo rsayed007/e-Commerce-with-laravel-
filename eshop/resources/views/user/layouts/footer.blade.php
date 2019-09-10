@@ -88,3 +88,6 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<script src="{{ asset('user/js/sly.min.js') }}""></script>
 	<script src="{{ asset('user/js/jquery.nicescroll.min.js') }}""></script>
 	<script src="{{ asset('user/js/main.js') }}""></script>
+
+	@section('footerSection')
+        @show

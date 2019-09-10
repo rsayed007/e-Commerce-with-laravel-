@@ -80,9 +80,9 @@
 					<i class="fa fa-times"></i></button>
 				</div>
 			  </div>
-			  <div class="box-body cal-md-6">
-                <table class="table table-bordered table-striped text-center">
-                        <thead>
+				<div class="box-body cal-md-6">
+					<table class="table table-bordered table-striped text-center">
+							<thead>
                           <tr>
                             <th>S.N</th>
                             <th>Color Name</th>
@@ -106,10 +106,10 @@
                             @endforeach
                           
                         </tbody>
-                      </table>
+                    </table>
                       {{ $colors->links()}}
 
-                    </div>
+                </div>
 			  
 			  <!-- /.box-footer-->
 			</div>
