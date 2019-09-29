@@ -26,40 +26,48 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu">
         <li class="header">MAIN NAVIGATION</li>
-        <li class="active treeview">
-          <a href="#">
-            <i class="fa fa-clipboard"></i> <span>Slider Dashboard</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="{{ url('/admin/add/slider') }}"><i class="fa fa-clipboard "></i> Add Slider</a></li>
-            <li><a href="{{ url('/admin/view/slider') }}"><i class="fa fa-circle-o"></i> View Slider</a></li>
-          </ul>
-        </li>
-        <li class="active treeview">
-          <a href="#">
-            <i class="fa fa-dashboard"></i> <span>Product Dashboard</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="{{ url('/admin/category') }}"><i class="fa fa-circle-o"></i> Add Category</a></li>
-            <li><a href="{{ url('/admin/add/product') }}"><i class="fa fa-circle-o"></i> Add Product</a></li>
-            <li><a href="{{ url('/admin/view/product') }}"><i class="fa fa-circle-o"></i> Product List</a></li>
-            <li><a href="{{ url('/admin/colors') }}"><i class="fa fa-circle-o"></i> Colors</a></li>
-            <li><a href="{{ url('/admin/size') }}"><i class="fa fa-circle-o"></i> Size</a></li>
+        @if (Auth::user()->role == 1)
+          <li class="active treeview">
+            <a href="#">
+              <i class="fa fa-clipboard"></i> <span>Slider Dashboard</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            </a>
+            <ul class="treeview-menu">
+              <li><a href="{{ url('/admin/add/slider') }}"><i class="fa fa-clipboard "></i> Add Slider</a></li>
+              <li><a href="{{ url('/admin/view/slider') }}"><i class="fa fa-circle-o"></i> View Slider</a></li>
+            </ul>
+          </li>
+          <li class="active treeview">
+            <a href="#">
+              <i class="fa fa-dashboard"></i> <span>Product Dashboard</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            </a>
+            <ul class="treeview-menu">
+              <li><a href="{{ url('/admin/category') }}"><i class="fa fa-circle-o"></i> Add Category</a></li>
+              <li><a href="{{ url('/admin/add/product') }}"><i class="fa fa-circle-o"></i> Add Product</a></li>
+              <li><a href="{{ url('/admin/view/product') }}"><i class="fa fa-circle-o"></i> Product List</a></li>
+              <li><a href="{{ url('/admin/colors') }}"><i class="fa fa-circle-o"></i> Colors</a></li>
+              <li><a href="{{ url('/admin/size') }}"><i class="fa fa-circle-o"></i> Size</a></li>
 
-          </ul>
-        </li>
-        <li class=" active ">
-            <li><a href="{{ url('/coupon') }}"><i class="fa fa-ticket"></i>Add Coupon </a></li>
-        </li>
-        <li class=" active ">
+            </ul>
+          </li>
+          <li class=" active ">
+              <li><a href="{{ url('/coupon') }}"><i class="fa fa-ticket"></i>Add Coupon </a></li>
+          </li>
+
+          <li class=" active ">
             <li><a href=""><i class="fa fa-files-o"></i> Users </a></li>
-        </li>
+          </li>
+        @else
+          <li class=" active ">
+              <li><a href="{{url('customer/profile')}}"><i class="fa fa-files-o"></i> Users Profile</a></li>
+          </li>
+        @endif
+
       </ul>
     </section>
     <!-- /.sidebar -->

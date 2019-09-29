@@ -15,6 +15,10 @@
 //     return view('welcome');
 // });
 
+
+
+Auth::routes();
+Route::get('/home', 'HomeController@index')->name('home');
 // ----- Admin controller route
 Route::get('admin/home', 'admin\ProductController@adminIndex');
 Route::get('admin/add/product', 'admin\ProductController@addProduct');
@@ -66,6 +70,20 @@ Route::post('/coupon/create', 'admin\CuponController@createCoupon');
 //  ----------- user controller route
 Route::get('/', 'user\FrontendController@userIndex');
 Route::get('/product/{product_id}', 'user\FrontendController@productDetails');
+Route::get('/customer/registration', 'user\FrontendController@customerRegister');
+Route::post('customer/reg/insert', 'user\FrontendController@customerRegisterInsert');
+
+
+
+// --------github register
+Route::get('register/github', 'user\GithubController@redirectToProvider');
+Route::get('register/github/callback', 'user\GithubController@handleProviderCallback');
+
+// --------google register
+Route::get('register/google', 'user\GoogleController@redirectToProvider');
+Route::get('register/google/callback', 'user\GoogleController@handleProviderCallback');
+
+
 
 // ------------ cart url
 Route::post('/add/to/cart', 'user\FrontendController@addToCart');
@@ -74,14 +92,19 @@ Route::post('/add/to/cart', 'user\FrontendController@addToCart');
 Route::get('/cart/view', 'user\CartController@viewCart')->name('cart');
 Route::get('/cart/view/delete/{cart_id}', 'user\CartController@deleteCart');
 Route::get('/cart/view/{coupon_name}', 'user\CartController@viewCart');
+Route::post('update/cart', 'user\CartController@updateCart');
 
 
+// ----------Customer Controller
+Route::get('customer/dashboard', 'user\CustomerController@customerDashboard');
+Route::get('customer/profile', 'user\CustomerController@customerProfile');
+Route::post('customer/profile/insert', 'user\CustomerController@customerProfileInsert');
+Route::post('customer/profile/update', 'user\CustomerController@customerProfileUpdate');
+Route::post('/checkout', 'user\CustomerController@checkout');
+// ajax link
+Route::post('/get/city/list', 'user\CustomerController@getCityList');
 
-
-
-
-Auth::routes();
-Route::get('/home', 'HomeController@index')->name('home');
-
-
+// ---------------Stripe payment 
+Route::post('order/place/stripe/view', 'user\StripePaymentController@stripe');
+Route::post('order/place/stripe', 'user\StripePaymentController@stripePost')->name('stripe.post');
 

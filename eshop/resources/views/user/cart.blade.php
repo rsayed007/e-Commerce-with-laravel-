@@ -8,9 +8,8 @@
             <div class="container">
                 
                 <div class="site-breadcrumb">
-                    <a href="">Home</a> / 
-                    <a href="">Sales</a> / 
-                    <a href="">Bags</a> / 
+                    <a href="{{url('/')}}">Home</a> / 
+                    
                     <span>Cart</span>
                 </div>
             <img src="{{ asset('user/img/page-info-art.png')}}" alt="" class="page-info-art">
@@ -27,6 +26,14 @@
                             <p>{{$errors}}</p>
                         </div>
                     @endif
+                    @if (session('success'))
+                        <div class="alert alert-danger text-center">
+                            {{session('success')}}
+                        </div>
+                    @endif
+
+            <form action="{{ url('update/cart')}}" method="POST"> 
+                @csrf
                 <div class="cart-table">
                     <table>
                         <thead>
@@ -52,15 +59,18 @@
                                         
                                         {{-- good practice  --}} 
                                         <h4>{{ $cart_item->RelationWithProductTable->product_name}}</h4>
-                                        <a href="#">{{ $cart_item->RelationWith_SizeTable->size }}/</a>
-                                        <a href="#">{{ $cart_item->RelationWithColorTable->color_name }}</a>
+                                        <a >{{ $cart_item->RelationWith_SizeTable->size }}/</a>
+                                        <a >{{ $cart_item->RelationWithColorTable->color_name }}</a>
                                     </div>
                                 </td>
                                 <td class="price-col">${{ $cart_item->RelationWithProductTable->product_price}}</td>
                                 <td class="quy-col">
                                     <div class="quy-input">
                                         <span>Qty</span>
-                                        <input type="number" value="{{ $cart_item->product_quentity}}">
+                                        <input type="hidden" name="product_id[]" value="{{ $cart_item->product_id }}">
+                                        <input type="hidden" name="size_id[]" value="{{ $cart_item->size_id }}">
+                                        <input type="hidden" name="color_id[]" value="{{ $cart_item->color_id }}">
+                                        <input type="number" name="product_quentity[]"  value="{{ $cart_item->product_quentity}}">
                                     </div>
                                 </td>
                                 <td class="total-col">${{ $cart_item->RelationWithProductTable->product_price * $cart_item->product_quentity}} </td>
@@ -75,14 +85,17 @@
                     </table>
                 </div>
                 <div class="row cart-buttons">
-                    <div class="col-lg-5 col-md-5">
-                        <div class="site-btn btn-continue">Continue shooping</div>
+                        <div class="col-lg-5 col-md-5">
+                            <a href="{{url('/')}}"><div class="site-btn btn-continue">Continue shooping</div> </a>
+                        </div>
+                        <div class="col-lg-7 col-md-7 text-lg-right text-left">
+                            <div class="site-btn btn-clear">Clear cart</div>
+                            <button type='submit' class="site-btn btn-line btn-update">Update Cart</button>
+                        </div>
                     </div>
-                    <div class="col-lg-7 col-md-7 text-lg-right text-left">
-                        <div class="site-btn btn-clear">Clear cart</div>
-                        <div class="site-btn btn-line btn-update">Update Cart</div>
-                    </div>
-                </div>
+            </form>
+
+
             </div>
             <div class="card-warp">
                 <div class="container">
@@ -126,7 +139,14 @@
                                     <li class="d-none" >Total<span id="total_amount_dami">{{ ($subTotal-($subTotal*$coupon_amount)/100) }}</span><span>$</span></li>
                                     <li class="total">Total<span id="total_amount">{{ ($subTotal-($subTotal*$coupon_amount)/100) }}</span><span>$</span></li>
                                 </ul>
-                                <a class="site-btn btn-full" href="checkout.html">Proceed to checkout</a>
+                                {{-- <a  href="{{url('/checkout')}}">Proceed to checkout</a> --}}
+                                <form action="{{url('/checkout')}}" method="post">
+                                    @csrf
+                                    {{-- <input type="hidden" name="shipping_cost2" value="{{ ($subTotal-($subTotal*$coupon_amount)/100) }}"> --}}
+                                    <input type="hidden" name="shipping" id="shipping"  value="0">
+                                    <input type="hidden" name="coupon_amount" value="{{ $coupon_amount }}">
+                                    <button class="site-btn btn-full" type="submit">Proceed to checkout</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -140,13 +160,16 @@
 
 @section('footerSection')
     <script>
+        // ------cuppon apply
         $(document).ready(function(){
             $('#coupon_btn').click(function(){
                 // alert($('#coupon_field').val());
                  var coupon_name = $('#coupon_field').val();
-                window.location.href = coupon_name;
+                window.location.href = 'view/'+coupon_name;
             });
+            // --------total price with Shipping charge
             $('#one').click(function(){
+                $('#shipping').val($('#one_value').html())
                 $('#shipping_cost').html($('#one_value').html())
                 var total_amount    = parseFloat($('#total_amount_dami').html())
                 var one_value       = parseFloat($('#one_value').html())
@@ -155,6 +178,7 @@
                 
             });
             $('#two').click(function(){
+                $('#shipping').val($('#two_value').html())
                 $('#shipping_cost').html($('#two_value').html())
                 var total_amount    = parseFloat($('#total_amount_dami').html())
                 var two_value       = parseFloat($('#two_value').html())
@@ -163,12 +187,15 @@
                 
             });
             $('#three').click(function(){
+                $('#shipping').val(0)
                 $('#shipping_cost').html(0)
-                var total_amount    = parseFloat($('#total_amount').html())
+                var total_amount    = parseFloat($('#total_amount_dami').html())
+                // var total_amount    = parseFloat($('#total_amount').html())
                 var new_total       = total_amount + 0;
                 $('#total_amount').html(new_total)
                 
             });
+            
         });
     
     </script>
